@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bob-a-thon Repository Map</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6; max-width: 1280px; margin: 0 auto; padding: 2rem 2.5rem; color: #24292e; }
+    h1 { font-size: 2rem; border-bottom: 2px solid #0969da; padding-bottom: 0.5rem; color: #0969da; }
+    h2 { font-size: 1.5rem; border-bottom: 1px solid #e1e4e8; padding-bottom: 0.3rem; margin-top: 2.5rem; }
+    h3 { font-size: 1.15rem; margin-top: 3rem; padding: 0.6rem 1rem;
+          background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px;
+          border-left: 4px solid #0969da; }
+    code { background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 3px;
+            padding: 0.15em 0.4em; font-family: SFMono-Regular, Consolas, monospace; font-size: 85%; }
+    pre  { background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 6px;
+            padding: 1rem; overflow-x: auto; }
+    pre code { background: none; border: none; padding: 0; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9rem; }
+    th { background: #f6f8fa; border: 1px solid #d0d7de; padding: 0.5rem 0.75rem;
+          text-align: left; font-weight: 600; white-space: nowrap; }
+    td { border: 1px solid #d0d7de; padding: 0.4rem 0.75rem; vertical-align: top; }
+    tr:hover td { background: #f0f7ff; }
+    blockquote { border-left: 4px solid #0969da; color: #57606a; margin: 1rem 0;
+                  padding: 0.25rem 1rem; background: #f6f8fa; border-radius: 0 4px 4px 0; }
+    hr { border: none; border-top: 1px solid #e1e4e8; margin: 2rem 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul li { margin: 0.15rem 0; }
+    ul ul { margin: 0.1rem 0; }
+    .badge { display: inline-block; padding: 0.2em 0.6em; font-size: 0.85em;
+              font-weight: 600; border-radius: 12px; margin-right: 0.5em; }
+    .badge-bff { background: #ddf4ff; color: #0969da; }
+    .badge-fed { background: #dafbe1; color: #1a7f37; }
+  </style>
+</head>
+<body>
+<h1>Mapa de Endpoints — Bob-a-thon Learning Platform</h1>
+<blockquote>
+<p><strong>Gerado automaticamente</strong> a partir dos inventários em <code>documentation/inventario/</code>
+<strong>Data de geração</strong>: 2026-05-20</p>
+</blockquote>
+<hr />
+<h2>Índice</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Seção</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="#1-fed--bff-chamadas-http">FED → BFF (Chamadas HTTP)</a></td>
+<td>Mapeamento de chamadas do frontend para o backend</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="#2-cadeia-completa-por-bff">Cadeia Completa por BFF</a></td>
+<td>Visão consolidada end-to-end de cada BFF</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. FED → BFF (Chamadas HTTP)</h2>
+<blockquote>
+<p>Mapeamento de chamadas HTTP dos frontends para os backends</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>FED</th>
+<th>URL Base</th>
+<th>BFF de Destino</th>
+<th>Endpoints Chamados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fed-bob-a-thon</code></td>
+<td><code>https://bff-bob-a-thon-env.eba-kipvpqnj.us-east-1.elasticbeanstalk.com</code></td>
+<td><code>bff-bob-a-thon</code></td>
+<td><code>GET /api/contents</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. Cadeia Completa por BFF</h2>
+<blockquote>
+<p>Visão consolidada end-to-end de cada BFF, mostrando FEDs consumidores e endpoints expostos</p>
+</blockquote>
+<h3><code>bff-bob-a-thon</code></h3>
+<p><strong>FED consumidor:</strong>
+- <code>fed-bob-a-thon</code></p>
+<p><strong>Endpoints expostos:</strong>
+- GET /api/contents
+- GET /api/contents/{id}
+- POST /api/contents
+- DELETE /api/contents/{id}</p>
+<hr />
+</body>
+</html>
