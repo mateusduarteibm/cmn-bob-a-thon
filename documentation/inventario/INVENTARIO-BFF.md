@@ -1,5 +1,23 @@
 # Inventário — BFF (`bff-*`)
 
+
+
+## 🔄 Atualização Automática - 2026-05-21
+
+**PR #3**: Added new endpoints so that users can favorite their courses
+
+**Mudanças**: Added new endpoints so that users can favorite their courses
+
+**Endpoints Afetados**:
+- `/user/{userId}/content/{contentId}`
+- `/{id}`
+- `/user/{userId}/count`
+- `/user/{userId}`
+
+**Motivo**: Mudanças em controllers detectadas; Mudanças em DTOs/modelos detectadas; Mudanças em configuração OpenAPI; Mudanças em lógica de negócio
+
+---
+
 > Preenchido progressivamente com o prompt `PROMPT-INVENTARIO.md`.
 > Ver índice geral: `INVENTARIO-REPOSITORIOS.md`
 >
