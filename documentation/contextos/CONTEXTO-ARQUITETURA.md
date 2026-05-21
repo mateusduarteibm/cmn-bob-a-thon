@@ -1,5 +1,17 @@
 # Contexto: Arquitetura Bob Learning Hub
 
+
+
+## 🏗️ Mudança Arquitetural - 2026-05-21
+
+**PR #3**: Added new endpoints so that users can favorite their courses
+
+**Impacto**: Added new endpoints so that users can favorite their courses
+
+**Detalhes**: Mudanças em controllers detectadas; Mudanças em DTOs/modelos detectadas; Mudanças em configuração OpenAPI; Mudanças em lógica de negócio
+
+---
+
 > **Uso deste documento**: Forneça este arquivo como contexto em solicitações relacionadas à arquitetura, estrutura de código e padrões de design dos repositórios do Bob Learning Hub. Ele consolida os padrões arquiteturais, organização de código e decisões técnicas de ambos os repositórios (frontend e backend).
 
 ---
