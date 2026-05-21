@@ -1,0 +1,408 @@
+{
+  "@context": {
+    "bob": "http://bob-learning-hub.com/schema#",
+    "schema": "http://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "attributes": "bob:attributes",
+    "identityKey": "bob:identityKey",
+    "humanRef": "bob:humanRef",
+    "invariant": "bob:invariant",
+    "hasState": {
+      "@id": "bob:hasState",
+      "@type": "@id"
+    },
+    "initialState": {
+      "@id": "bob:initialState",
+      "@type": "@id"
+    },
+    "terminalStates": {
+      "@id": "bob:terminalStates",
+      "@type": "@id"
+    },
+    "relatesTo": {
+      "@id": "bob:relatesTo",
+      "@type": "@id"
+    },
+    "emitsEvent": {
+      "@id": "bob:emitsEvent",
+      "@type": "@id"
+    },
+    "from": {
+      "@id": "bob:from",
+      "@type": "@id"
+    },
+    "to": {
+      "@id": "bob:to",
+      "@type": "@id"
+    },
+    "precondition": "bob:precondition",
+    "postcondition": "bob:postcondition",
+    "Entity": "bob:Entity",
+    "Operation": "bob:Operation",
+    "State": "bob:State"
+  },
+  "@graph": [
+    {
+      "id": "bob:LearningContent",
+      "type": "Entity",
+      "name": "LearningContent",
+      "description": "Representa um conteúdo educacional na plataforma Bob Learning Hub",
+      "identityKey": "contentId: UUID",
+      "humanRef": "contentName",
+      "attributes": {
+        "contentId": "string",
+        "contentName": "string",
+        "contentDescription": "string",
+        "contentImageUrl": "string",
+        "contentType": "VIDEO|ARTICLE|TUTORIAL|DOCUMENTATION|COURSE|PODCAST",
+        "category": "string",
+        "instructor": "string|null",
+        "duration": "number|null",
+        "level": "BEGINNER|INTERMEDIATE|ADVANCED|null",
+        "rating": "number|null",
+        "enrolledStudents": "number|null",
+        "featured": "boolean",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+      },
+      "invariant": [
+        "contentName must be unique",
+        "contentImageUrl must be a valid URL",
+        "contentType must be one of the defined values",
+        "rating must be between 0 and 5 if present",
+        "duration must be positive if present"
+      ],
+      "hasState": [
+        "bob:ContentDraft",
+        "bob:ContentPublished",
+        "bob:ContentArchived"
+      ],
+      "initialState": "bob:ContentDraft",
+      "terminalStates": [
+        "bob:ContentArchived"
+      ],
+      "relatesTo": [
+        "bob:Category",
+        "bob:Instructor",
+        "bob:Student",
+        "bob:Enrollment",
+        "bob:Rating"
+      ],
+      "emitsEvent": [
+        "bob:ContentCreated",
+        "bob:ContentPublished",
+        "bob:ContentUpdated",
+        "bob:ContentDeleted"
+      ]
+    },
+    {
+      "id": "bob:Category",
+      "type": "Entity",
+      "name": "Category",
+      "description": "Categoria de conteúdos educacionais para organização e filtragem",
+      "identityKey": "categoryId: UUID",
+      "humanRef": "categoryName",
+      "attributes": {
+        "categoryId": "string",
+        "categoryName": "string",
+        "categoryDescription": "string|null",
+        "categoryIcon": "string|null",
+        "contentCount": "number"
+      },
+      "invariant": [
+        "categoryName must be unique",
+        "contentCount must be non-negative"
+      ],
+      "relatesTo": [
+        "bob:LearningContent"
+      ]
+    },
+    {
+      "id": "bob:Instructor",
+      "type": "Entity",
+      "name": "Instructor",
+      "description": "Instrutor responsável pela criação e ministração de conteúdos educacionais",
+      "identityKey": "instructorId: UUID",
+      "humanRef": "instructorName",
+      "attributes": {
+        "instructorId": "string",
+        "instructorName": "string",
+        "instructorBio": "string|null",
+        "instructorEmail": "string",
+        "instructorAvatar": "string|null",
+        "specialization": "string|null",
+        "rating": "number|null",
+        "totalStudents": "number"
+      },
+      "invariant": [
+        "instructorEmail must be unique and valid",
+        "rating must be between 0 and 5 if present",
+        "totalStudents must be non-negative"
+      ],
+      "relatesTo": [
+        "bob:LearningContent"
+      ]
+    },
+    {
+      "id": "bob:Student",
+      "type": "Entity",
+      "name": "Student",
+      "description": "Estudante que consome conteúdos educacionais na plataforma",
+      "identityKey": "studentId: UUID",
+      "humanRef": "studentEmail",
+      "attributes": {
+        "studentId": "string",
+        "studentName": "string",
+        "studentEmail": "string",
+        "studentAvatar": "string|null",
+        "enrolledCourses": "number",
+        "completedCourses": "number",
+        "registeredAt": "timestamp"
+      },
+      "invariant": [
+        "studentEmail must be unique and valid",
+        "enrolledCourses must be non-negative",
+        "completedCourses must be non-negative",
+        "completedCourses cannot exceed enrolledCourses"
+      ],
+      "relatesTo": [
+        "bob:LearningContent",
+        "bob:Enrollment",
+        "bob:Rating"
+      ]
+    },
+    {
+      "id": "bob:Enrollment",
+      "type": "Entity",
+      "name": "Enrollment",
+      "description": "Matrícula de um estudante em um conteúdo educacional",
+      "identityKey": "enrollmentId: UUID",
+      "humanRef": "enrollmentId",
+      "attributes": {
+        "enrollmentId": "string",
+        "studentId": "string",
+        "contentId": "string",
+        "enrolledAt": "timestamp",
+        "progress": "number",
+        "completed": "boolean",
+        "completedAt": "timestamp|null"
+      },
+      "invariant": [
+        "A student can only enroll once per content",
+        "progress must be between 0 and 100",
+        "completedAt must be set when completed is true"
+      ],
+      "hasState": [
+        "bob:EnrollmentActive",
+        "bob:EnrollmentCompleted",
+        "bob:EnrollmentCancelled"
+      ],
+      "initialState": "bob:EnrollmentActive",
+      "terminalStates": [
+        "bob:EnrollmentCompleted",
+        "bob:EnrollmentCancelled"
+      ],
+      "relatesTo": [
+        "bob:Student",
+        "bob:LearningContent"
+      ],
+      "emitsEvent": [
+        "bob:EnrollmentCreated",
+        "bob:EnrollmentCompleted",
+        "bob:EnrollmentCancelled"
+      ]
+    },
+    {
+      "id": "bob:Rating",
+      "type": "Entity",
+      "name": "Rating",
+      "description": "Avaliação de um conteúdo educacional por um estudante",
+      "identityKey": "ratingId: UUID",
+      "humanRef": "ratingId",
+      "attributes": {
+        "ratingId": "string",
+        "studentId": "string",
+        "contentId": "string",
+        "score": "number",
+        "comment": "string|null",
+        "createdAt": "timestamp"
+      },
+      "invariant": [
+        "A student can only rate a content once",
+        "score must be between 1 and 5",
+        "Student must be enrolled in the content to rate it"
+      ],
+      "relatesTo": [
+        "bob:Student",
+        "bob:LearningContent"
+      ],
+      "emitsEvent": [
+        "bob:RatingCreated",
+        "bob:RatingUpdated"
+      ]
+    },
+    {
+      "id": "bob:CreateContent",
+      "type": "Operation",
+      "name": "CreateContent",
+      "description": "Cria um novo conteúdo educacional no sistema",
+      "from": "bob:Instructor",
+      "to": "bob:LearningContent",
+      "precondition": [
+        "Instructor must be authenticated",
+        "Content name must be unique",
+        "Required fields must be provided"
+      ],
+      "postcondition": [
+        "Content is created in DRAFT state",
+        "Content is associated with the Instructor",
+        "ContentCreated event is emitted"
+      ]
+    },
+    {
+      "id": "bob:PublishContent",
+      "type": "Operation",
+      "name": "PublishContent",
+      "description": "Publica um conteúdo educacional tornando-o visível para estudantes",
+      "from": "bob:LearningContent",
+      "to": "bob:LearningContent",
+      "precondition": [
+        "Content must be in DRAFT state",
+        "All required fields must be filled",
+        "Instructor must be authorized"
+      ],
+      "postcondition": [
+        "Content state changes to PUBLISHED",
+        "Content becomes visible in catalog",
+        "ContentPublished event is emitted"
+      ]
+    },
+    {
+      "id": "bob:UpdateContent",
+      "type": "Operation",
+      "name": "UpdateContent",
+      "description": "Atualiza informações de um conteúdo educacional existente",
+      "from": "bob:LearningContent",
+      "to": "bob:LearningContent",
+      "precondition": [
+        "Content must exist",
+        "Instructor must be the content owner or admin",
+        "Updated data must be valid"
+      ],
+      "postcondition": [
+        "Content information is updated",
+        "updatedAt timestamp is refreshed",
+        "ContentUpdated event is emitted"
+      ]
+    },
+    {
+      "id": "bob:DeleteContent",
+      "type": "Operation",
+      "name": "DeleteContent",
+      "description": "Remove um conteúdo educacional do sistema",
+      "from": "bob:LearningContent",
+      "to": "bob:LearningContent",
+      "precondition": [
+        "Content must exist",
+        "Instructor must be the content owner or admin",
+        "No active enrollments exist (or handle cascade)"
+      ],
+      "postcondition": [
+        "Content is removed from the system",
+        "Associated enrollments are handled",
+        "ContentDeleted event is emitted"
+      ]
+    },
+    {
+      "id": "bob:EnrollStudent",
+      "type": "Operation",
+      "name": "EnrollStudent",
+      "description": "Matricula um estudante em um conteúdo educacional",
+      "from": "bob:Student",
+      "to": "bob:LearningContent",
+      "precondition": [
+        "Student must be authenticated",
+        "Content must be in PUBLISHED state",
+        "Student must not be already enrolled"
+      ],
+      "postcondition": [
+        "Enrollment is created in ACTIVE state",
+        "Content enrolledStudents count is incremented",
+        "EnrollmentCreated event is emitted"
+      ]
+    },
+    {
+      "id": "bob:RateContent",
+      "type": "Operation",
+      "name": "RateContent",
+      "description": "Permite que um estudante avalie um conteúdo educacional",
+      "from": "bob:Student",
+      "to": "bob:LearningContent",
+      "precondition": [
+        "Student must be enrolled in the content",
+        "Student must not have rated this content before",
+        "Score must be between 1 and 5"
+      ],
+      "postcondition": [
+        "Rating is created and associated with Student and Content",
+        "Content average rating is recalculated",
+        "RatingCreated event is emitted"
+      ]
+    },
+    {
+      "id": "bob:FilterByCategory",
+      "type": "Operation",
+      "name": "FilterByCategory",
+      "description": "Filtra conteúdos educacionais por categoria",
+      "from": "bob:Student",
+      "to": "bob:LearningContent",
+      "precondition": [
+        "Category must exist or be 'all'",
+        "Contents must be in PUBLISHED state"
+      ],
+      "postcondition": [
+        "Filtered list of contents is returned",
+        "Only contents matching the category are included"
+      ]
+    },
+    {
+      "id": "bob:ContentDraft",
+      "type": "State",
+      "name": "ContentDraft",
+      "description": "Conteúdo está em rascunho e não visível para estudantes"
+    },
+    {
+      "id": "bob:ContentPublished",
+      "type": "State",
+      "name": "ContentPublished",
+      "description": "Conteúdo está publicado e visível no catálogo"
+    },
+    {
+      "id": "bob:ContentArchived",
+      "type": "State",
+      "name": "ContentArchived",
+      "description": "Conteúdo foi arquivado e não está mais disponível"
+    },
+    {
+      "id": "bob:EnrollmentActive",
+      "type": "State",
+      "name": "EnrollmentActive",
+      "description": "Matrícula está ativa e o estudante pode acessar o conteúdo"
+    },
+    {
+      "id": "bob:EnrollmentCompleted",
+      "type": "State",
+      "name": "EnrollmentCompleted",
+      "description": "Estudante completou o conteúdo com sucesso"
+    },
+    {
+      "id": "bob:EnrollmentCancelled",
+      "type": "State",
+      "name": "EnrollmentCancelled",
+      "description": "Matrícula foi cancelada pelo estudante"
+    }
+  ]
+}
